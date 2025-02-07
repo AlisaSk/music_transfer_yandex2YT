@@ -1,7 +1,6 @@
 from yandex_music import Client, Artist
 import pandas as pd
 
-
 class YandexExporter:
     def __init__(self, token:str) -> None:
         self.client = Client(token).init()
@@ -11,7 +10,7 @@ class YandexExporter:
     def extract_data(self) -> None:
         tracks = self.client.users_likes_tracks().tracks
         info_counter = 0
-        for i in range(100):
+        for i in range(10):
             track = tracks[i]
             track = track.fetch_track()
             artist = track.artists_name()[0]

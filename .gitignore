@@ -8,3 +8,7 @@ __pycache__/
 
 # Logs and databases
 *.csv
+oauth.json
+
+
+.vscode
