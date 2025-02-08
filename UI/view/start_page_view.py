@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 class StartPageView:
     def __init__(self, root:tk.Tk):
         self.root = root
-        load_dotenv()
         self.root.title("Music Transfer Yandex2YT")
         self.root.geometry("400x300")
         self.root.configure(bg="#282c34")
@@ -27,7 +26,7 @@ class StartPageView:
 
         tk.Label(frame, text="Name of file for saving songs:", fg="white", bg="#282c34").pack(pady=2)
         self.output_file = tk.Entry(frame, width=30)
-        self.output_file.insert(0, "songs")
+        self.output_file.insert(0, "songs.csv")
         self.output_file.pack(pady=2)
 
         tk.Label(frame, text="Songs number:", fg="white", bg="#282c34").pack(pady=2)
@@ -39,22 +38,13 @@ class StartPageView:
     def start_transfer(self):
         name = self.playlist_name.get()
         desc = self.playlist_desc.get()
-        file = self.output_file.get() + ".csv"
+        file = self.output_file.get()
         try:
+            if not file.endswith(".csv"):
+                raise ValueError("The file name must end with .csv")
+            
             songs_n = int(self.songs_number.get())
-            #messagebox.showinfo("Data is correct!", f"Creating playlist: {name}\n: Desc {desc}\nFile: {file}\nN songs: {songs_n}")
-            # Здесь можно вызывать свою логику переноса музыки
+
             LogPageView(self.root, name, desc, file, songs_n)
-        except ValueError:
-            messagebox.showerror("Music transfer yandex2YT Error", "Number of songs should be an integer!")
-        
-        # exporter = YandexExporter(file_name, args.songs_number)
-        # importer = YouTubeImporter(args.playlist_name, args.playlist_desc, file_name)
-        # exporter.load_csv()
-        # importer.create_playlist_from_csv()
-
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = StartPageView(root)
-    root.mainloop()
+        except ValueError as e:
+            messagebox.showerror("Music transfer yandex2YT Error", str(e))

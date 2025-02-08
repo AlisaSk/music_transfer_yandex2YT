@@ -35,17 +35,14 @@ class LogPageView:
         
 
     def update_logs(self):
-        """Функция для автоматической подгрузки логов"""
         if os.path.exists("logs.txt"):
             with open("logs.txt", "r") as log_file:
                 logs = log_file.readlines()
             
-            # Очищаем текущий вывод и добавляем новые строки
             self.log_display.delete(1.0, tk.END)
             for log in logs:
                 self.log_display.insert(tk.END, log)
 
-        # Через 1 секунду снова проверяем обновления в логах
         self.root.after(1000, self.update_logs)
 
     def start_app(self):
@@ -54,20 +51,17 @@ class LogPageView:
 
         self.root.after(0, self.update_logs)
 
-        threading.Thread(target=self.run_exporter, args=(exporter,)).start()
-        threading.Thread(target=self.run_importer, args=(importer,)).start()
+        threading.Thread(target=self.run_transfer, args=(exporter,importer)).start()
+        #threading.Thread(target=self.run_importer, args=(importer,)).start()
 
         # self.root.after(0, self.run_exporter, exporter)
         # self.root.after(0, self.run_importer, importer)
 
-    def run_exporter(self, exporter):
-        """Запуск экспортера и обновление логов"""
+    def run_transfer(self, exporter, importer):
         exporter.load_csv()
-        # self.update_logs()
-
-    def run_importer(self, importer):
-        """Запуск импортера и обновление логов"""
         importer.create_playlist_from_csv()
-        # self.update_logs()
+
+    # def run_importer(self, importer):
+
 
         
