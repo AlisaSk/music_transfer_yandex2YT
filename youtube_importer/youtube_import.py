@@ -3,10 +3,13 @@ from ytmusicapi import YTMusic, OAuthCredentials
 
 
 class YouTubeImporter:
-    def __init__(self, client_id:str, client_secret:str) -> None:
+    def __init__(self, client_id:str, client_secret:str, playlist_name:str, playlist_desc:str, file_name:str) -> None:
         self.client_id = client_id
         self.client_secret = client_secret
-        self.data = pd.read_csv("yandex_music.csv")
+        self.playlist_name = playlist_name
+        self.playlist_desc = playlist_desc
+        self.file_name = file_name
+        #self.data = pd.read_csv(file_name)
         # print(self.data.head())
         self.ytmusic = YTMusic('oauth.json', oauth_credentials=OAuthCredentials(client_id=self.client_id, client_secret=self.client_secret))
 
@@ -14,12 +17,13 @@ class YouTubeImporter:
         print("test")
         #print(ytmusic.get_charts())
         songs = self.collect_songs_ids()
-        playlist_id = self.ytmusic.create_playlist("TEST 10 SONGS", description="please work", video_ids=songs)
+        playlist_id = self.ytmusic.create_playlist(title=self.playlist_name, description=self.playlist_desc, video_ids=songs)
         print(f"Playlist {playlist_id} created")
 
     def collect_songs_ids(self) -> list:
         songs_ids = []
-        for row in self.data.itertuples(index=False):
+        data = pd.read_csv(self.file_name)
+        for row in data.itertuples(index=False):
             search_str = str(row[1]) + " " + str(row[0]) # row[1] -- song, row[0] -- artist
             print(search_str)
             search_res = self.ytmusic.search(query=search_str, limit=1)
