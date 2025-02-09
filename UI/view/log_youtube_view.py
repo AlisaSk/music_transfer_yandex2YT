@@ -6,33 +6,27 @@ from UI.view.colors import Colors
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-from yandex_service import YandexExporter
-from youtube_service import YouTubeImporter
+from youtube_service import YouTubeCopy
 import threading
 
 
-class LogPageView:
-    def __init__(self, root:tk.Tk, name:str, desc:str, file:str, songs_n:int):
+class LogYoutubeView:
+    def __init__(self, root:tk.Tk, id:str, songs_n:int):
         self.root = root
-        self.name = name
-        self.desc = desc
-        self.file = file
+        self.id = id
         self.songs_n = songs_n
         for widget in root.winfo_children():
             widget.destroy()
         self.set_scene()
-        #self.start_app()
         self.root.after(3000, self.start_app)
-        
+
     def set_scene(self):
         frame = tk.Frame(self.root, bg=Colors.BACKGROUND.value)
         frame.pack(expand=True)
 
-        tk.Label(frame, text="Creating your playlist", fg="black", font=("Arial", 12, "bold"), bg=Colors.BACKGROUND.value).pack(pady=5)
+        tk.Label(frame, text="Adding to your playlist", fg="black", font=("Arial", 12, "bold"), bg=Colors.BACKGROUND.value).pack(pady=5)
         self.log_display = scrolledtext.ScrolledText(frame, width=50, height=15, bg=Colors.LOG_BG.value, fg="black", font=("Arial", 10), wrap=tk.WORD)
         self.log_display.pack(padx=10, pady=5)
-        print("lol")
-        
 
     def update_logs(self):
         if os.path.exists("logs.txt"):
@@ -49,23 +43,13 @@ class LogPageView:
 
         self.root.after(1000, self.update_logs)
 
-    def start_app(self):
-        exporter = YandexExporter(self.file, self.songs_n)
-        importer = YouTubeImporter(self.name, self.desc, self.file)
 
+    def start_app(self):
+        editor = YouTubeCopy(self.id, self.songs_n)
         self.root.after(0, self.update_logs)
 
-        threading.Thread(target=self.run_transfer, args=(exporter,importer)).start()
-        #threading.Thread(target=self.run_importer, args=(importer,)).start()
-
-        # self.root.after(0, self.run_exporter, exporter)
-        # self.root.after(0, self.run_importer, importer)
-
-    def run_transfer(self, exporter, importer):
-        exporter.load_csv()
-        importer.create_playlist_from_csv()
-
-    # def run_importer(self, importer):
-
-
+        threading.Thread(target=self.run_adding, args=(editor,)).start()
         
+
+    def run_adding(self, editor):
+        editor.add_songs_to_playlist()

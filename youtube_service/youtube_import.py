@@ -35,5 +35,4 @@ class YouTubeImporter:
         print("...Completed")
         return songs_ids
     
-    def collect_songs_youtube(self) -> list:
-        pass
+    
