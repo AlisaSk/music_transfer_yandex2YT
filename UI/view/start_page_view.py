@@ -16,7 +16,7 @@ class StartPageView:
         frame.pack(expand=True, padx=20, pady=20)
 
 
-        self.option_var = tk.StringVar(value="yandex")  # Переменная для хранения выбранного варианта
+        self.option_var = tk.StringVar(value="yandex")  
 
         radio_button1 = tk.Radiobutton(frame, text="Transfer from Yandex", variable=self.option_var, value="yandex", fg="black", bg=Colors.BACKGROUND.value)
         radio_button1.pack(pady=2)

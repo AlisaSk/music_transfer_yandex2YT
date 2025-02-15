@@ -21,7 +21,7 @@ class LogPageView:
         for widget in root.winfo_children():
             widget.destroy()
         self.set_scene()
-        #self.start_app()
+    
         self.root.after(3000, self.start_app)
         
     def set_scene(self):
@@ -31,7 +31,7 @@ class LogPageView:
         tk.Label(frame, text="Creating your playlist", fg="black", font=("Arial", 12, "bold"), bg=Colors.BACKGROUND.value).pack(pady=5)
         self.log_display = scrolledtext.ScrolledText(frame, width=50, height=15, bg=Colors.LOG_BG.value, fg="black", font=("Arial", 10), wrap=tk.WORD)
         self.log_display.pack(padx=10, pady=5)
-        print("lol")
+    
         
 
     def update_logs(self):
@@ -56,16 +56,13 @@ class LogPageView:
         self.root.after(0, self.update_logs)
 
         threading.Thread(target=self.run_transfer, args=(exporter,importer)).start()
-        #threading.Thread(target=self.run_importer, args=(importer,)).start()
-
-        # self.root.after(0, self.run_exporter, exporter)
-        # self.root.after(0, self.run_importer, importer)
+       
 
     def run_transfer(self, exporter, importer):
         exporter.load_csv()
         importer.create_playlist_from_csv()
 
-    # def run_importer(self, importer):
+   
 
 
         
