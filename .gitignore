@@ -1,0 +1,15 @@
+# API keys, tokens, passwords, etc.
+.env
+
+# Caches
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs and databases
+*.csv
+oauth.json
+*.txt
+
+
+.vscode
